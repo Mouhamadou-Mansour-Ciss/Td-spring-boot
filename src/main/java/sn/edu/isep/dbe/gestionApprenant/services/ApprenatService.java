@@ -1,5 +1,8 @@
 package sn.edu.isep.dbe.gestionApprenant.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import sn.edu.isep.dbe.gestionApprenant.model.Apprenant;
 
@@ -10,15 +13,19 @@ import java.util.Optional;
 
 @Service
 public class ApprenatService {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     private static List<Apprenant> apprenants = new ArrayList<>(Arrays.asList(
             new Apprenant(1, "Mansour", "Ciss", "Diamniadio", "ciss@gmail.com"),
             new Apprenant(2, "Oumar", "Soumare", "Fouta", "soumare@gmail.com"),
             new Apprenant(3, "Amina", "Kah", "Dakar", "kha@gmail.com")
     ));
-
     public List<Apprenant> getApprenant() {
-        return apprenants;
+        String sql = "SELECT * FROM apprenants";
+        List<Apprenant> apprenants1 = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Apprenant.class));
+        return  apprenants1;
+        //return apprenants;
     }
 
     public Apprenant getApprenantByID(Integer id) {
